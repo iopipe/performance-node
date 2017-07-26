@@ -35,10 +35,9 @@ function markData(timelineInstance, obj = {}) {
 
 module.exports = class Timeline {
   constructor(kwargs = {}) {
-    const startTime = process.hrtime();
+    this.constructionTimeMillis = hrMillis();
     this.data = [];
     this.offset = kwargs.offset;
-    this.constructionTimeMillis = hrMillis(startTime, getOffset(this));
     return this;
   }
   mark(name) {

@@ -160,7 +160,6 @@ test('Measure without start mark uses construction time (with offset) perf.now()
   const { startTime: start2, duration: duration2 } = perf.getEntriesByName(
     'evil'
   )[0];
-  console.log(start2, duration2);
   expect(start2).toBe(0);
   expect(_.inRange(duration2, 45, 60)).toBe(true);
 });
