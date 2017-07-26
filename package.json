@@ -1,0 +1,58 @@
+{
+  "name": "performance-node",
+  "version": "0.1.0",
+  "description": "Performance (User Timing API) for Node.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run babel",
+    "babel": "babel src --out-dir dist --ignore **/*.test.js,**/__mocks__/**",
+    "eslint": "eslint src",
+    "jest": "jest",
+    "test": "npm run eslint && npm run jest && npm run build",
+    "prepublish": "npm run build",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iopipe/performance-node.git"
+  },
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "performance",
+    "usertiming",
+    "user-timing",
+    "hrtime",
+    "metrics"
+  ],
+  "author": "IOpipe <dev@iopipe.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iopipe/performance-node/issues"
+  },
+  "homepage": "https://github.com/iopipe/performance-node#readme",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-preset-env": "^1.6.0",
+    "delay": "^2.0.0",
+    "eslint": "^3.12.2",
+    "eslint-plugin-jest": "^20.0.3",
+    "eslint-plugin-prettier": "^2.1.2",
+    "jest": "^20.0.4",
+    "lodash": "^4.17.4",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.5.2"
+  },
+  "dependencies": {},
+  "pre-commit": [
+    "test"
+  ],
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "dist"
+    ]
+  }
+}
