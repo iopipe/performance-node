@@ -16,16 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/iopipe/performance-node.git"
   },
-  "files": [
-    "dist/"
-  ],
-  "keywords": [
-    "performance",
-    "usertiming",
-    "user-timing",
-    "hrtime",
-    "metrics"
-  ],
+  "files": ["dist/"],
+  "keywords": ["performance", "usertiming", "user-timing", "hrtime", "metrics"],
   "author": "IOpipe <dev@iopipe.com>",
   "license": "Apache-2.0",
   "bugs": {
@@ -33,6 +25,7 @@
   },
   "homepage": "https://github.com/iopipe/performance-node#readme",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.6.0",
@@ -46,13 +39,8 @@
     "prettier": "^1.5.2"
   },
   "dependencies": {},
-  "pre-commit": [
-    "test"
-  ],
+  "pre-commit": ["test"],
   "jest": {
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "dist"
-    ]
+    "coveragePathIgnorePatterns": ["/node_modules/", "dist"]
   }
 }
