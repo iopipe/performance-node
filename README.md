@@ -25,7 +25,7 @@ With npm in project directory:
 Then, run your application:
 
 ```js
-import perf from 'performance-node';
+const perf = require('performance-node');
 
 const timeline = new perf();
 
@@ -41,7 +41,7 @@ const myMeasure = timeline.getEntriesByName('foo-measure')[0];
 ## Methods
 
 ```js
-import perf from 'performance-node';
+const perf = require('performance-node');
 
 const timeline = new perf();
 
@@ -81,7 +81,7 @@ timeline.now();
 By default, the `startTime` of each mark is calculated by subracting the construction time from `process.hrtime`. If you would rather the startTime map as closely as possible to `process.hrtime` values, set `offset: 0`. You can also supply any number as a custom offset.
 
 ```js
-import perf from 'performance-node';
+const perf = require('performance-node');
 
 const timeline = new perf({ offset: 0 });
 
