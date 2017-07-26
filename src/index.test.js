@@ -13,8 +13,10 @@ test('Can use the new keyword', () => {
 });
 
 test('Has initial values', () => {
-  const perf = new lib();
-  expect(_.isNumber(perf.constructionTime)).toBe(true);
+  const perf = new lib({ offset: 10 });
+  expect(_.isArray(perf.data)).toBe(true);
+  expect(_.isNumber(perf.offset)).toBe(true);
+  expect(_.isNumber(perf.constructionTimeMillis)).toBe(true);
 });
 
 test('Has all methods', () => {
@@ -143,6 +145,35 @@ test('No mark collisions', async () => {
 
   expect(perf.getEntries().length).toBe(2);
   expect(timeline.getEntries().length).toBe(1);
+});
+
+test('Measure without start mark uses construction time (with offset) perf.now() as measurement', async () => {
+  const perf = new lib();
+  await delay(20);
+  perf.measure('bad-measure');
+  const { startTime, duration } = perf.getEntries()[0];
+  expect(startTime).toBe(0);
+  expect(_.inRange(duration, 15, 30)).toBe(true);
+  perf.mark('ok');
+  await delay(30);
+  perf.measure('evil', undefined, 'ok');
+  const { startTime: start2, duration: duration2 } = perf.getEntriesByName(
+    'evil'
+  )[0];
+  expect(start2).toBe(0);
+  expect(_.inRange(duration2, 45, 60)).toBe(true);
+});
+
+test('Measure with a start time but no end uses start time as beginning and now() as end', async () => {
+  const perf = new lib();
+  await delay(10);
+  perf.mark('start');
+  await delay(20);
+  perf.measure('measure', 'start');
+  await delay(40);
+  const { startTime, duration } = perf.getEntriesByName('measure')[0];
+  expect(_.inRange(startTime, 5, 20)).toBe(true);
+  expect(_.inRange(duration, 15, 30)).toBe(true);
 });
 
 test('The lib uses a construction time offset by default', async () => {
