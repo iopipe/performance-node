@@ -8,17 +8,17 @@ function hrMillis(time = process.hrtime(), offset = 0) {
 }
 
 function getOffset(timelineInstance) {
-  const { offset, constructionTime } = timelineInstance;
-  return typeof offset === 'number' ? offset : constructionTime;
+  const { offset, constructionTimeMillis } = timelineInstance;
+  return typeof offset === 'number' ? offset : constructionTimeMillis;
 }
 
 function markData(timelineInstance, obj = {}) {
   const { data = [] } = timelineInstance;
-  const hrArray = process.hrtime();
+  const defaultHrtime = process.hrtime();
   // set defaults
   const {
     name,
-    startTime = hrMillis(hrArray, getOffset(timelineInstance)),
+    startTime = hrMillis(defaultHrtime, getOffset(timelineInstance)),
     duration = 0,
     entryType = 'mark'
   } = obj;
@@ -30,16 +30,15 @@ function markData(timelineInstance, obj = {}) {
     entryType
   };
 
-  const arr = data.concat();
-  arr.push(item);
-  return arr.sort((a, b) => a.startTime - b.startTime);
+  return data.concat(item).sort((a, b) => a.startTime - b.startTime);
 }
 
 module.exports = class Timeline {
   constructor(kwargs = {}) {
-    this.constructionTime = hrMillis();
+    const startTime = process.hrtime();
     this.data = [];
     this.offset = kwargs.offset;
+    this.constructionTimeMillis = hrMillis(startTime, getOffset(this));
     return this;
   }
   mark(name) {
@@ -57,14 +56,16 @@ module.exports = class Timeline {
   measure(name, startString, endString) {
     const startArr = this.getEntriesByName(startString);
     const startMark = startArr[startArr.length - 1] || {
-      startTime: this.constructionTime
+      startTime: this.constructionTimeMillis - getOffset(this)
     };
 
     const endArr = this.getEntriesByName(endString);
-    const fallbackEndTime = process.hrtime();
-    const endMark = endArr[endArr.length - 1] || {
-      startTime: hrMillis(fallbackEndTime, getOffset(this))
+    const fallbackEndMark = {
+      startTime: this.now()
     };
+    const endMark =
+      (startString ? endArr[endArr.length - 1] : fallbackEndMark) ||
+      fallbackEndMark;
 
     const duration = endMark.startTime - startMark.startTime;
 
