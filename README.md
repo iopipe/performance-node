@@ -95,5 +95,20 @@ const myMeasure = timeline.getEntriesByName('foo-measure')[0];
 // {name: 'foo-measure', startTime: 227851.91, duration: 10.5, entryType: 'measure'}
 ```
 
+#### `timestamp` (bool: optional = false)
+
+Add a `timestamp` (unix epoch) value for each mark based on `Date.now()`.
+
+```js
+const Perf = require('performance-node');
+
+const timeline = new Perf({ timestamp: true });
+
+timeline.mark('foo-start');
+
+const myMeasure = timeline.getEntriesByName('foo-start')[0];
+// {name: 'foo-start', startTime: 1.2, duration: 0, entryType: 'mark', timestamp: 1501189303951}
+```
+
 ## Contributing
 - This project uses [Prettier](https://github.com/prettier/prettier). Please execute `npm run eslint -- --fix` to auto-format the code before submitting pull requests.
