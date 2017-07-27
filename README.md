@@ -1,5 +1,6 @@
 # Performance for Node.js
 
+[![CircleCI](https://circleci.com/gh/iopipe/performance-node/tree/master.svg?style=svg)](https://circleci.com/gh/iopipe/performance-node/tree/master)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 A superset of the [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API) (`window.performance`) for Node.js
@@ -25,9 +26,9 @@ With npm in project directory:
 Then, run your application:
 
 ```js
-const perf = require('performance-node');
+const Perf = require('performance-node');
 
-const timeline = new perf();
+const timeline = new Perf();
 
 timeline.mark('foo-start');
 // delay(10)
@@ -41,9 +42,9 @@ const myMeasure = timeline.getEntriesByName('foo-measure')[0];
 ## Methods
 
 ```js
-const perf = require('performance-node');
+const Perf = require('performance-node');
 
-const timeline = new perf();
+const timeline = new Perf();
 
 // set marks
 timeline.mark('foo-start');
@@ -81,9 +82,9 @@ timeline.now();
 By default, the `startTime` of each mark is calculated by subracting the construction time from `process.hrtime`. If you would rather the startTime map as closely as possible to `process.hrtime` values, set `offset: 0`. You can also supply any number as a custom offset.
 
 ```js
-const perf = require('performance-node');
+const Perf = require('performance-node');
 
-const timeline = new perf({ offset: 0 });
+const timeline = new Perf({ offset: 0 });
 
 timeline.mark('foo-start');
 // delay(10)
