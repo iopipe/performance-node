@@ -13,22 +13,27 @@ function getOffset(timelineInstance) {
 }
 
 function markData(timelineInstance, obj = {}) {
-  const { data = [] } = timelineInstance;
+  const { data = [], useTimestamp } = timelineInstance;
   const defaultHrtime = process.hrtime();
   // set defaults
   const {
     name,
     startTime = hrMillis(defaultHrtime, getOffset(timelineInstance)),
+    timestamp = Date.now(),
     duration = 0,
     entryType = 'mark'
   } = obj;
 
-  const item = {
+  let item = {
     name,
     startTime,
     duration,
     entryType
   };
+
+  if (useTimestamp) {
+    item.timestamp = timestamp;
+  }
 
   return data.concat(item).sort((a, b) => a.startTime - b.startTime);
 }
@@ -38,6 +43,7 @@ module.exports = class Timeline {
     this.constructionTimeMillis = hrMillis();
     this.data = [];
     this.offset = kwargs.offset;
+    this.useTimestamp = kwargs.timestamp || false;
     return this;
   }
   mark(name) {
@@ -71,6 +77,7 @@ module.exports = class Timeline {
     this.data = markData(this, {
       name,
       startTime: startMark.startTime,
+      timestamp: startMark.timestamp,
       duration,
       entryType: 'measure'
     });

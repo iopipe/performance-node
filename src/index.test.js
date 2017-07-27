@@ -47,6 +47,7 @@ test('Can mark one', () => {
   expect(_.isNumber(first.startTime)).toBe(true);
   expect(_.isNumber(first.duration)).toBe(true);
   expect(_.isString(first.name)).toBe(true);
+  expect(first.timestamp).toBe(undefined);
 });
 
 test('Can mark multiple', async () => {
@@ -82,6 +83,7 @@ test('Order of marks is correct', async () => {
   expect(bar1.name).toBe('bar');
   expect(bar2.name).toBe('bar');
   expect(measure.duration).toEqual(bar2.startTime - foo2.startTime);
+  expect(measure.timestamp).toBe(undefined);
 });
 
 test('Can clear marks, measures, and all items', async () => {
@@ -206,6 +208,21 @@ test('The lib uses the custom offset option properly, perf.now should be very si
   const startMillis = start[0] * 1000 + start[1] / 1e6;
   const number = perf.now();
   expect(_.inRange(number, startMillis - 10, startMillis + 10)).toBe(true);
+});
+
+test('The lib uses the timestamp option properly', async () => {
+  const perf = new lib({ timestamp: true });
+  const before = Date.now() - 1;
+  perf.mark('foo');
+  await delay(10);
+  perf.mark('bar');
+  perf.measure('m1', 'foo', 'bar');
+  const after = Date.now() + 1;
+  const { timestamp } = perf.getEntries()[0];
+  expect(_.isNumber(timestamp)).toBe(true);
+  expect(_.inRange(timestamp, before, after)).toBe(true);
+  const { timestamp: measureTimestamp } = perf.getEntriesByName('m1')[0];
+  expect(measureTimestamp).toBe(timestamp);
 });
 
 test('The code is fast enough', async () => {
