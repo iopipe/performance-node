@@ -1,5 +1,7 @@
 # Performance for Node.js
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/iopipe/performance-node.svg)](https://greenkeeper.io/)
+
 [![CircleCI](https://circleci.com/gh/iopipe/performance-node/tree/master.svg?style=svg)](https://circleci.com/gh/iopipe/performance-node/tree/master)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
