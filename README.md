@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/iopipe/performance-node/tree/master.svg?style=svg)](https://circleci.com/gh/iopipe/performance-node/tree/master)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 A superset of the [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API) (`window.performance`) for Node.js
 

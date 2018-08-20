@@ -1,26 +1,26 @@
 import _ from 'lodash';
 import delay from 'delay';
 
-import lib from './index';
+import Lib from './index';
 
 test('Lib is a function', () => {
-  expect(_.isFunction(lib)).toBe(true);
+  expect(_.isFunction(Lib)).toBe(true);
 });
 
 test('Can use the new keyword', () => {
-  const perf = new lib();
+  const perf = new Lib();
   expect(perf).toBeTruthy();
 });
 
 test('Has initial values', () => {
-  const perf = new lib({ offset: 10 });
+  const perf = new Lib({ offset: 10 });
   expect(_.isArray(perf.data)).toBe(true);
   expect(_.isNumber(perf.offset)).toBe(true);
   expect(_.isNumber(perf.constructionTimeMillis)).toBe(true);
 });
 
 test('Has all methods', () => {
-  const perf = new lib();
+  const perf = new Lib();
   [
     'mark',
     'measure',
@@ -37,21 +37,21 @@ test('Has all methods', () => {
 });
 
 test('Can mark one', () => {
-  const perf = new lib();
+  const perf = new Lib();
   perf.mark('woot');
   const entries = perf.getEntries();
   expect(_.isArray(entries)).toBe(true);
-  expect(entries.length).toBe(1);
+  expect(entries).toHaveLength(1);
   const first = entries[0];
   expect(_.isPlainObject(first)).toBe(true);
   expect(_.isNumber(first.startTime)).toBe(true);
   expect(_.isNumber(first.duration)).toBe(true);
   expect(_.isString(first.name)).toBe(true);
-  expect(first.timestamp).toBe(undefined);
+  expect(first.timestamp).toBeUndefined();
 });
 
 test('Can mark multiple', async () => {
-  const perf = new lib();
+  const perf = new Lib();
 
   perf.mark('woot');
   await delay(90);
@@ -60,15 +60,15 @@ test('Can mark multiple', async () => {
   const entries = perf.getEntries();
 
   expect(_.isArray(entries)).toBe(true);
-  expect(entries.length).toBe(2);
+  expect(entries).toHaveLength(2);
 
   const [m1, m2] = entries;
   const diff = m2.startTime - m1.startTime;
   expect(diff > 80 && diff < 100).toBe(true);
 });
 
-test('Order of marks is correct', async () => {
-  const perf = new lib();
+test('Order of marks is correct', () => {
+  const perf = new Lib();
 
   perf.mark('foo');
   perf.mark('foo');
@@ -83,45 +83,45 @@ test('Order of marks is correct', async () => {
   expect(bar1.name).toBe('bar');
   expect(bar2.name).toBe('bar');
   expect(measure.duration).toEqual(bar2.startTime - foo2.startTime);
-  expect(measure.timestamp).toBe(undefined);
+  expect(measure.timestamp).toBeUndefined();
 });
 
-test('Can clear marks, measures, and all items', async () => {
-  const perf = new lib();
+test('Can clear marks, measures, and all items', () => {
+  const perf = new Lib();
 
   perf.mark('woot');
   perf.mark('hooray');
   perf.measure('measure-1', 'woot', 'hooray');
 
-  expect(perf.getEntries().length).toBe(3);
+  expect(perf.getEntries()).toHaveLength(3);
 
   perf.clearMarks();
-  expect(perf.getEntries().length).toBe(1);
+  expect(perf.getEntries()).toHaveLength(1);
 
   perf.mark('wee');
-  expect(perf.getEntries().length).toBe(2);
+  expect(perf.getEntries()).toHaveLength(2);
 
   perf.clearMeasures();
-  expect(perf.getEntries().length).toBe(1);
+  expect(perf.getEntries()).toHaveLength(1);
 
   perf.mark('ding');
   perf.measure('measure-2', 'wee', 'ding');
-  expect(perf.getEntries().length).toBe(3);
+  expect(perf.getEntries()).toHaveLength(3);
 
   perf.clear();
-  expect(perf.getEntries().length).toBe(0);
+  expect(perf.getEntries()).toHaveLength(0);
 });
 
-test('Can use .now', async () => {
-  const perf = new lib();
+test('Can use .now', () => {
+  const perf = new Lib();
 
   const num = perf.now();
 
   expect(_.isNumber(num)).toBe(true);
 });
 
-test('Can use get* methods', async () => {
-  const perf = new lib();
+test('Can use get* methods', () => {
+  const perf = new Lib();
 
   perf.mark('woot');
   perf.mark('hooray');
@@ -130,27 +130,27 @@ test('Can use get* methods', async () => {
   perf.mark('woot');
   perf.measure('measure-2', 'woot', 'ding');
 
-  expect(perf.getEntries().length).toBe(6);
-  expect(perf.getEntriesByType('mark').length).toBe(4);
-  expect(perf.getEntriesByType('measure').length).toBe(2);
-  expect(perf.getEntriesByName('ding').length).toBe(1);
-  expect(perf.getEntriesByName('woot').length).toBe(2);
+  expect(perf.getEntries()).toHaveLength(6);
+  expect(perf.getEntriesByType('mark')).toHaveLength(4);
+  expect(perf.getEntriesByType('measure')).toHaveLength(2);
+  expect(perf.getEntriesByName('ding')).toHaveLength(1);
+  expect(perf.getEntriesByName('woot')).toHaveLength(2);
 });
 
-test('No mark collisions', async () => {
-  const perf = new lib();
-  const timeline = new lib();
+test('No mark collisions', () => {
+  const perf = new Lib();
+  const timeline = new Lib();
 
   perf.mark('woot');
   perf.mark('wow');
   timeline.mark('ok');
 
-  expect(perf.getEntries().length).toBe(2);
-  expect(timeline.getEntries().length).toBe(1);
+  expect(perf.getEntries()).toHaveLength(2);
+  expect(timeline.getEntries()).toHaveLength(1);
 });
 
 test('Measure without start mark uses construction time (with offset) perf.now() as measurement', async () => {
-  const perf = new lib();
+  const perf = new Lib();
   await delay(20);
   perf.measure('bad-measure');
   const { startTime, duration } = perf.getEntries()[0];
@@ -163,11 +163,11 @@ test('Measure without start mark uses construction time (with offset) perf.now()
     'evil'
   )[0];
   expect(start2).toBe(0);
-  expect(_.inRange(duration2, 45, 60)).toBe(true);
+  expect(_.inRange(duration2, 45, 70)).toBe(true);
 });
 
 test('Measure with a start time but no end uses start time as beginning and now() as end', async () => {
-  const perf = new lib();
+  const perf = new Lib();
   await delay(10);
   perf.mark('start');
   await delay(20);
@@ -178,15 +178,15 @@ test('Measure with a start time but no end uses start time as beginning and now(
   expect(_.inRange(duration, 15, 30)).toBe(true);
 });
 
-test('The lib uses a construction time offset by default', async () => {
+test('The Lib uses a construction time offset by default', async () => {
   const start = process.hrtime();
-  const perf = new lib();
+  const perf = new Lib();
   await delay(10);
   const number = perf.now();
   const end = process.hrtime(start);
   expect(_.inRange(number, 5, 15)).toBe(true);
 
-  // expect the lib to report numbers that match hrTime functionality to within .5ms
+  // expect the Lib to report numbers that match hrTime functionality to within .5ms
   // this may be subject to environment quirks
   const hrMillis = (number, end[1] / 1e6);
   const diff = hrMillis - number;
@@ -202,16 +202,16 @@ test('The lib uses a construction time offset by default', async () => {
   expect(_.inRange(time, 8, 20)).toBe(true);
 });
 
-test('The lib uses the custom offset option properly, perf.now should be very similar to process.hrtime', async () => {
-  const perf = new lib({ offset: 0 });
+test('The Lib uses the custom offset option properly, perf.now should be very similar to process.hrtime', () => {
+  const perf = new Lib({ offset: 0 });
   const start = process.hrtime();
   const startMillis = start[0] * 1000 + start[1] / 1e6;
   const number = perf.now();
   expect(_.inRange(number, startMillis - 10, startMillis + 10)).toBe(true);
 });
 
-test('The lib uses the timestamp option properly', async () => {
-  const perf = new lib({ timestamp: true });
+test('The Lib uses the timestamp option properly', async () => {
+  const perf = new Lib({ timestamp: true });
   const before = Date.now() - 1;
   perf.mark('foo');
   await delay(10);
@@ -226,7 +226,7 @@ test('The lib uses the timestamp option properly', async () => {
 });
 
 test('The code is fast enough', async () => {
-  const perf = new lib();
+  const perf = new Lib();
 
   const start = process.hrtime();
   perf.mark('foo');
@@ -238,7 +238,7 @@ test('The code is fast enough', async () => {
   const time = perf.getEntriesByName('m1')[0].duration;
   expect(_.inRange(time, 8, 20)).toBe(true);
 
-  // expect the lib to report numbers that match hrTime functionality to within .5ms
+  // expect the Lib to report numbers that match hrTime functionality to within .5ms
   // this may be subject to environment quirks
   const hrEndMillis = end[1] / 1e6;
   const diff = time - hrEndMillis;

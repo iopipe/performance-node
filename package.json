@@ -1,23 +1,32 @@
 {
   "name": "performance-node",
-  "version": "0.2.0",
+  "version": "0.0.0-semantically-released",
   "description": "Performance (User Timing API) for Node.js",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run babel",
-    "babel": "babel src --out-dir dist --ignore **/*.test.js,**/__mocks__/**",
-    "eslint": "eslint src",
-    "jest": "jest",
-    "test": "npm run eslint && npm run jest && npm run build",
-    "prepublish": "npm run build",
-    "prepare": "npm run build"
+    "build": "iopipe-scripts build --ignore __mocks__/*,*.test.js",
+    "commit": "iopipe-scripts commit",
+    "lint": "iopipe-scripts lint",
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
+    "release": "iopipe-scripts release",
+    "test": "iopipe-scripts test",
+    "validate": "iopipe-scripts validate"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iopipe/performance-node.git"
   },
-  "files": ["dist/"],
-  "keywords": ["performance", "usertiming", "user-timing", "hrtime", "metrics"],
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "performance",
+    "usertiming",
+    "user-timing",
+    "hrtime",
+    "metrics"
+  ],
   "author": "IOpipe <dev@iopipe.com>",
   "license": "Apache-2.0",
   "bugs": {
@@ -25,22 +34,30 @@
   },
   "homepage": "https://github.com/iopipe/performance-node#readme",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-eslint": "^7.2.3",
-    "babel-preset-env": "^1.6.0",
+    "@iopipe/scripts": "^1.4.1",
     "delay": "^2.0.0",
-    "eslint": "^3.12.2",
-    "eslint-plugin-jest": "^20.0.3",
-    "eslint-plugin-prettier": "^2.1.2",
-    "jest": "^20.0.4",
     "lodash": "^4.17.4",
-    "pre-commit": "^1.2.2",
-    "prettier": "^1.5.2"
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {},
-  "pre-commit": ["test"],
+  "engines": {
+    "node": ">=4.3.2"
+  },
+  "pre-commit": [
+    "validate"
+  ],
   "jest": {
-    "coveragePathIgnorePatterns": ["/node_modules/", "dist"]
-  }
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "dist"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@iopipe/scripts/eslint.js"
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "dist",
+    "coverage"
+  ]
 }

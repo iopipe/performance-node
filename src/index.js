@@ -24,7 +24,7 @@ function markData(timelineInstance, obj = {}) {
     entryType = 'mark'
   } = obj;
 
-  let item = {
+  const item = {
     name,
     startTime,
     duration,
